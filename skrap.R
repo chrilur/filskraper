@@ -25,29 +25,25 @@ download <- function(i){
   download.file(img, navn, mode="wb")
 }
 
+#Sy sammen liste med neste nivå
+get.liste <- function(i) {
+  files <- get.dir(liste[i])
+  liste2 <- paste0(liste[i],files)
+  return(liste2)
+} 
+
 #Sett sammen nivå 1 og 2 av stiene
 mappe1 <- get.dir(url)
 antall <- length(mappe1)
 url2s <- paste0(url, mappe1)
 
 #Pluss på nivå 3
-get.url3 <- function(i) {
-  folders <- get.dir(url2s[i])
-  url3s <- paste0(url2s[i], folders)
-  return(url3s)
-  }
-
-liste <- unlist(lapply(1:antall, function(x) {get.url3(x)}))
+liste <- unlist(lapply(1:antall, function(x) {get.liste(x)}))
 lengde <- length(liste)
 
-#Lag ferdig liste med filendelser
-get.liste <- function(i) {
-  files <- get.dir(liste[i])
-  liste2 <- paste0(liste[i],files)
-  return(liste2)
-}  
-
+#Pluss på filene
 ferdig.liste <- unlist(lapply(1:lengde, function(x) {get.liste(x)}))
 ant_filer <- length(ferdig.liste)
 
-lapply(1:ant_filer, function(x) {download(x)}))
+#Last ned
+lapply(1:ant_filer, function(x) {download(x)})
